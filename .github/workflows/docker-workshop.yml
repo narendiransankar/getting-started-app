@@ -24,25 +24,25 @@ jobs:
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/hcl_training:latest .
       
-      # # Step 4: Push to Docker Hub
-      # - name: Push to Docker Hub
-      #   run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+      # Step 4: Push to Docker Hub
+      - name: Push to Docker Hub
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/hcl_training:latest
 
       # # Step 5: Pull image (just to demonstrate)
       # - name: Pull image
-      #   run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+      #   run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/hcl_training:latest
 
       # # Step 6: Run container with volume mount (persistent db)
       # - name: Run container with volume
       #   run: |
       #     docker volume create workshop-data
-      #     docker run -d --name workshop-app -p 8000:8000 -v workshop-data:/data ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+      #     docker run -d --name workshop-app -p 8000:8000 -v workshop-data:/data ${{ secrets.DOCKER_HUB_USERNAME }}/hcl_training:latest
 
       # # Step 7: Run container with bind mount
       # - name: Run container with bind mount
       #   run: |
       #     mkdir -p ./local-data
-      #     docker run -d --name workshop-app-bind -p 8001:8000 -v $(pwd)/local-data:/data ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+      #     docker run -d --name workshop-app-bind -p 8001:8000 -v $(pwd)/local-data:/data ${{ secrets.DOCKER_HUB_USERNAME }}/hcl_training:latest
 
       # # Step 8: Docker Compose
       # - name: Start with Docker Compose
@@ -50,7 +50,7 @@ jobs:
       #     echo 'version: "3.8"
       #     services:
       #       app:
-      #         image: ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+      #         image: ${{ secrets.DOCKER_HUB_USERNAME }}/hcl_training:latest
       #         ports:
       #           - "8002:8000"
       #         volumes:
