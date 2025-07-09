@@ -15,6 +15,8 @@ jobs:
           sudo docker build -t ${{ secrets.DOCKER_USERNAME }}/getting-started:latest .
           sudo docker push ${{ secrets.DOCKER_USERNAME }}/getting-started
 
+          
+
       - name: Set AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
@@ -25,8 +27,14 @@ jobs:
       - name: AWS ECR Push
         run: |
           aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin 012889719104.dkr.ecr.us-east-1.amazonaws.com
+          sudo docker build -t getting-started .
           sudo docker tag getting-started:latest 012889719104.dkr.ecr.us-east-1.amazonaws.com/hcl/getting-started
           sudo docker push 012889719104.dkr.ecr.us-east-1.amazonaws.com/hcl/getting-started
+
+          # aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | sudo docker login --username AWS --password-stdin 427521931204.dkr.ecr.ap-south-1.amazonaws.com
+          # sudo docker build -t getting-started .
+          # sudo docker tag getting-started:latest 427521931204.dkr.ecr.ap-south-1.amazonaws.com/getting-started:latest
+          # sudo docker push 427521931204.dkr.ecr.ap-south-1.amazonaws.com/getting-started:latest
     
   deploy:
     needs: build
