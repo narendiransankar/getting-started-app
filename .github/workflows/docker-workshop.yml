@@ -1,0 +1,61 @@
+name: Docker Workshop Automation
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  docker-workshop:
+    runs-on: self-hosted
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Docker Login
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # Step 3: Build Docker image
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/hcl_training:latest .
+      
+      # # Step 4: Push to Docker Hub
+      # - name: Push to Docker Hub
+      #   run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+
+      # # Step 5: Pull image (just to demonstrate)
+      # - name: Pull image
+      #   run: docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+
+      # # Step 6: Run container with volume mount (persistent db)
+      # - name: Run container with volume
+      #   run: |
+      #     docker volume create workshop-data
+      #     docker run -d --name workshop-app -p 8000:8000 -v workshop-data:/data ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+
+      # # Step 7: Run container with bind mount
+      # - name: Run container with bind mount
+      #   run: |
+      #     mkdir -p ./local-data
+      #     docker run -d --name workshop-app-bind -p 8001:8000 -v $(pwd)/local-data:/data ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+
+      # # Step 8: Docker Compose
+      # - name: Start with Docker Compose
+      #   run: |
+      #     echo 'version: "3.8"
+      #     services:
+      #       app:
+      #         image: ${{ secrets.DOCKER_HUB_USERNAME }}/workshop-app:latest
+      #         ports:
+      #           - "8002:8000"
+      #         volumes:
+      #           - workshop-data:/data
+      #           - ./local-data:/bind-data
+      #     volumes:
+      #       workshop-data:' > docker-compose.yml
+      #     docker-compose up -d
